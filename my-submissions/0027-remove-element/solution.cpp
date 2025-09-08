@@ -1,30 +1,27 @@
 class Solution {
 public:
-
-    int findValidElement(vector<int>& nums, int val, int i, int j){
-        while (j >= i && nums[j] == val) j--;
-        return j;
-    }
-    
     int removeElement(vector<int>& nums, int val) {
-        // if (nums.size() == 1 && nums[0] == val) return 0;
-        int i = 0, j = nums.size() - 1;
-        j = findValidElement(nums, val, i, j);
-        if (j == -1) return 0;
-        int k = 0;
-        while (i <= j){
-            if (nums[i] == val){
-                // swap nums[i] <-> nums[j]
-                nums[i]^=nums[j];
-                nums[j]^=nums[i];
-                nums[i]^=nums[j];
-                j--;
+        if (nums.size() == 0) return 0;
+        if (nums.size() == 1){
+            if (nums[0] == val){
+                return 0;
             }
-            j = findValidElement(nums, val, i, j);
-            i++;
-            k++;
+            else{
+                return 1;
+            }
         }
-        // cout<<k<<endl;
-        return k;
+
+        int n = nums.size();
+        int st = 0, ed = n - 1; 
+
+        while (st <= ed){
+            if (nums[st] == val){
+                while (ed > st && nums[ed] == val)ed--;
+                if (ed == st) return st;
+                swap(nums[st], nums[ed--]);
+            }
+            st++;
+        }
+        return st;
     }
 };

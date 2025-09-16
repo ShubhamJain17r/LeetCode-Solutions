@@ -1,37 +1,37 @@
 class Solution {
 public:
+    bool isValid(char c){
+        return isUpper(c) || isDigit(c) || isLower(c);
+    }
     bool isUpper(char c){
-        return c >= 65 && c <= 90; 
-    }
-    bool isLower(char c){
-        return c>=97 && c<=122;
-    }
-    bool isAlpha(char c){
-        return (c >= 65 && c <= 90) || (c>=97 && c<=122);
+        return (c >='A' && c<='Z');
     }
     bool isDigit(char c){
-        return c>='0' && c<='9'; 
+        return (c>='0' && c<='9');
+    }
+    bool isLower(char c){
+        return (c>='a' && c<='z');
     }
     char toLower(char c){
-        if (isUpper(c)){
+        if (isUpper(c))
             return c + 32;
-        }
-        return '\0';
+        return c;
     }
     bool isPalindrome(string s) {
         int n = s.length();
-        int st = 0, ed = n-1;
+        int l = 0, r = n-1;
+        while (l < r){
+            if (!isValid(s[l])){
+                l++;
+                continue;
+            }
+            if (!isValid(s[r])){
+                r--;
+                continue;
+            }
 
-        while (st < ed){
-            while (st < ed && !isAlpha(s[st]) && !isDigit(s[st])) st++;
-            while (st < ed && !isAlpha(s[ed]) && !isDigit(s[ed])) ed--;
-            if (st == ed) return true;
-
-            if (!isDigit(s[st]) && !isLower(s[st])) s[st] = toLower(s[st]);
-            if (!isDigit(s[ed]) && !isLower(s[ed])) s[ed] = toLower(s[ed]);
-
-            if (s[st] != s[ed])return false;
-            st++, ed--;
+            if (s[l] != s[r] && toLower(s[l]) != toLower(s[r])) return false;
+            l++, r--;
         }
         return true;
     }

@@ -1,23 +1,24 @@
 class Solution {
 public:
     string mergeAlternately(string word1, string word2) {
-        string result = "";
         bool chance = true;
+        string ans = "";
+        int n = word1.length(), m = word2.length();
         int i = 0, j = 0;
-        while (i < word1.length() && j < word2.length()){
+        while (i < n && j < m){
             if (chance){
-                result.push_back(word1[i++]);
+                ans.push_back(word1[i++]);
             }else{
-                result.push_back(word2[j++]);
+                ans.push_back(word2[j++]);
             }
             chance = !chance;
         }
-        while (i < word1.length()){
-            result.push_back(word1[i++]);
+        while (i < n){
+            ans.push_back(word1[i++]);
         }
-        while (j < word2.length()){
-            result.push_back(word2[j++]);
+        while (j < m){
+            ans.push_back(word2[j++]);
         }
-        return result;
+        return ans;
     }
 };

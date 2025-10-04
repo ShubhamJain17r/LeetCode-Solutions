@@ -1,32 +1,41 @@
 class Solution {
 public:
     string longestPalindrome(string s) {
-        if (s.empty()) return "";
-        int start = 0, maxLen = 1;
+        int l = s.length();
 
-        for (int i = 0; i < s.size(); i++) {
-            // Odd length palindrome (center at i)
-            int l = i, r = i;
-            while (l >= 0 && r < s.size() && s[l] == s[r]) {
-                if (r - l + 1 > maxLen) {
-                    maxLen = r - l + 1;
-                    start = l;
-                }
-                l--; r++;
+        int maxLen = 0, currLen = 0;
+        string ans = "";
+
+        for (int i = 0; i<l; ++i){
+            // check odd length palindrome substring
+            int j = i-1, k = i+1;
+            currLen = 1;
+            while (j >=0 && k<l && s[j] == s[k]){
+                currLen += 2;
+                j--, k++;
+            }
+            if (currLen >= maxLen){
+                maxLen = currLen;
+                ans = s.substr(j+1, maxLen);
+                cout<<ans<<endl;
             }
 
-            // Even length palindrome (center between i and i+1)
-            l = i, r = i + 1;
-            while (l >= 0 && r < s.size() && s[l] == s[r]) {
-                if (r - l + 1 > maxLen) {
-                    maxLen = r - l + 1;
-                    start = l;
+            // check even length palindrome substring
+            j = i-1, k = i+1;
+            if (s[i] == s[k]){
+                k++;
+                currLen = 2;
+                while (j >=0 && k<l && s[j] == s[k]){
+                    currLen += 2;
+                    j--, k++;
                 }
-                l--; r++;
+                if (currLen >= maxLen){
+                    maxLen = currLen;
+                    ans = s.substr(j+1, maxLen);
+                    cout<<ans<<endl;
+                }
             }
         }
-
-        return s.substr(start, maxLen);
+        return ans;
     }
 };
-

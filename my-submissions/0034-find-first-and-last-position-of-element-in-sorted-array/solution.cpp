@@ -1,22 +1,24 @@
 class Solution {
 public:
     vector<int> searchRange(vector<int>& nums, int target) {
-        int n = nums.size();
-        int s = 0;
-        int e = n-1;
+        int s = 0, e = nums.size() - 1;
 
         while (s <= e){
-            int m = s + (e - s)/2;
-            if (nums[m] == target){
-                s = m-1, e = m + 1;
-                while (s >= 0 && nums[s] == target)s--;
-                while (e < n && nums[e] == target) e++;
+            int m = s + (e - s) / 2;
 
-                return vector<int> {s+1, e-1};
+            if (nums[m] == target){
+                s = m - 1, e = m + 1;
+                while (s >= 0 && nums[s] == nums[s + 1]) s--;
+                while (e < nums.size() && nums[e] == nums[e - 1]) e++;
+
+                return {s + 1, e - 1};
             }
-            if (nums[m] > target)e = m-1;
-            else s = m + 1;
+            else if (nums[m] < target)
+                s = m + 1;
+            else 
+                e = m - 1;
         }
-        return vector<int> {-1,-1};
+
+        return {-1,-1};
     }
 };

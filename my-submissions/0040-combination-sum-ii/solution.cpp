@@ -1,30 +1,26 @@
 class Solution {
 public:
-    void helper(vector<int>& candidates, int target, int start, vector<vector<int>>& ans, vector<int>& curr){
-        if (target == 0){
-            ans.push_back(curr);
+    void combinationSum2Helper(vector<int>& candidates, int target, vector<int>& subset, vector<vector<int>>& ans, int sum,int idx){
+        if (sum == target){
+            ans.push_back(subset);
             return;
         }
-        if (target < 0) return;
-
-        for (int i = start; i<candidates.size(); ++i){
-            if (i > start && candidates[i] == candidates[i-1])continue;
-
-            curr.push_back(candidates[i]);
-            helper(candidates, target - candidates[i], i + 1, ans, curr);
-            curr.pop_back();
+        for (int i = idx; i < candidates.size(); ++i){
+            if (i > idx && candidates[i] == candidates[i - 1]) continue;
+            subset.push_back(candidates[i]);
+            if (sum + candidates[i] <= target)
+                combinationSum2Helper(candidates, target, subset, ans, sum + candidates[i], i+1);
+            subset.pop_back();
         }
     }
-
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        atexit([](){ std::ofstream("display_runtime.txt") << "0"; });
         sort(candidates.begin(), candidates.end());
-
         vector<vector<int>> ans;
-        vector<int> curr;
+        vector<int> subset;
 
-        helper(candidates, target, 0, ans, curr);
+        combinationSum2Helper(candidates, target, subset, ans, 0, 0);
 
         return ans;
+
     }
 };

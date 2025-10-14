@@ -1,23 +1,29 @@
 class Solution {
 public:
-    void helper(vector<int>& candidates, int target, vector<vector<int>>& ans, vector<int>& curr, int start){
-        if (target == 0){
-            ans.push_back(curr);
+    void combinationSumHelper(vector<int>& candidates, int target, vector<int>& subset, vector<vector<int>>& ans, int sum, int i){
+        if (sum == target){
+            ans.push_back(subset);
             return;
         }
-        if (target < 0) return;
-
-        for (int i = start; i < candidates.size(); ++i){
-            curr.push_back(candidates[i]);
-            helper(candidates, target - candidates[i], ans, curr, i);
-            curr.pop_back();
+        if (sum > target){
+            return;
+        }
+        for (int j = i; j < candidates.size(); ++j){
+            if (candidates[j] > target) return;
+            subset.push_back(candidates[j]);
+            sum += candidates[j];
+            combinationSumHelper(candidates, target, subset, ans, sum, j);
+            subset.pop_back();
+            sum -= candidates[j];
         }
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        if (target == 1) return {};
+        sort(candidates.begin(), candidates.end());
         vector<vector<int>> ans;
-        vector<int> curr;
+        vector<int> subset;
 
-        helper(candidates, target, ans, curr, 0);
+        combinationSumHelper(candidates, target, subset, ans, 0, 0);
 
         return ans;
     }

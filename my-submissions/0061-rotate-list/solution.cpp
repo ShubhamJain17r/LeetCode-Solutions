@@ -11,32 +11,29 @@
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        if (k == 0 || !head || !(head -> next)) return head;
-        int len = 1;
+        if (!head || !head->next) return head;
         ListNode* temp = head;
-        while (temp -> next){
+        ListNode* tail = head;
+        int count = 0;
+
+        while (temp){
             temp = temp -> next;
-            len++;
+            count++;
         }
-        cout<<len<<endl;
-        k %= len;
-        cout<<k<<endl;
-        if (!k) return head; 
-        ListNode* prev = nullptr;
+
+        k %= count;
 
         temp = head;
+
         while (temp -> next){
-            if (prev) prev = prev -> next;
-            if (k == 1){
-                prev = head;
+            temp = temp -> next;
+            if (--k < 0){
+                tail = tail -> next;
             }
-            k--;
-            temp = temp->next;
         }
-        // cout<<temp -> val<<" "<<prev -> val<<endl;
         temp -> next = head;
-        head = prev -> next;
-        prev -> next = nullptr;
+        head = tail->next;
+        tail -> next = nullptr;
         return head;
     }
 };

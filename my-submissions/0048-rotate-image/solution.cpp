@@ -5,13 +5,12 @@ public:
 
         for (int i = 0; i < n; ++i){
             for (int j = i; j < n; ++j){
-                swap(matrix[i][j], matrix[j][i]);
+                swap(matrix[i][j] , matrix[j][i]);
             }
         }
-        for (int row = 0; row < n; ++row){
-            int s = 0, e = n - 1;
-            while (s < e){
-                swap(matrix[row][s++], matrix[row][e--]);
+        for (int i = 0; i < n; ++i){
+            for (int j = 0; j < n/2; ++j) {
+                swap(matrix[i][j], matrix[i][n - j - 1]);
             }
         }
     }

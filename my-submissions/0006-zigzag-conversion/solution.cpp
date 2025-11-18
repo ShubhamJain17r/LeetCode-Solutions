@@ -1,25 +1,20 @@
 class Solution {
 public:
     string convert(string s, int numRows) {
-        int len = s.length();
-        if (numRows == 1 || len <= numRows) return s;
-
-        vector<string> rows(numRows);
-        int currRow = 0;
-        bool goingDown = false;
-
-        for (char c : s){
-            rows[currRow] += c;
-
-            if (currRow == 0 || currRow == numRows - 1)
+        if (numRows == 1 || numRows >= s.length()) return s;
+        vector<string> VOS(numRows, "");
+        bool goingDown = true;
+        int i = 0;
+        for (char c : s) {
+            VOS[i].push_back(c);
+            goingDown ? i++ : i--;
+            if (i == 0 || i == numRows - 1)
                 goingDown = !goingDown;
-            
-            currRow += goingDown ? 1 : -1; 
         }
-        string result;
-        for (string &row : rows)
-            result += row;
-
-        return result;
+        string res = "";
+        for (string str : VOS) {
+            res += str;
+        }
+        return res;
     }
 };

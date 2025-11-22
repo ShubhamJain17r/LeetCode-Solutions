@@ -1,18 +1,18 @@
 class Solution {
 public:
-    vector<int> twoSum(vector<int>& nums, int target) {
-        int n = nums.size();
-
-        int l = 0, r = n-1;
-
-        while (l < r){
-            int sum = (nums[l] + nums[r]);
-
-            cout << sum<<endl;
-            if (sum == target) return {l+1,r+1};
-            else if ((nums[l] + nums[r]) < target) l++;
-            else r--;
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int n = numbers.size();
+        int i = 0, j = n - 1;
+        while (i < j) {
+            int sum = numbers[i] + numbers[j];
+            if (sum == target)
+                return {i+1, j+1};
+            else if (sum < target) {
+                i++;
+            }
+            else 
+                j--;
         }
-        return {};
+        return {-1, -1};
     }
 };

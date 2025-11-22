@@ -10,13 +10,19 @@
  */
 class Solution {
 public:
-    ListNode* reverseListHelper(ListNode* prev, ListNode* curr){
-        if (!curr) return prev;
-        ListNode* ahead = curr -> next;
-        curr -> next = prev;
-        return reverseListHelper(curr, ahead);
-    } 
     ListNode* reverseList(ListNode* head) {
-        return reverseListHelper(nullptr, head);
+        if (!head || !head -> next) return head;
+        ListNode* prev = head;
+        ListNode* temp = head -> next;
+        ListNode* ahead = temp -> next;
+        head -> next = nullptr;
+        while (ahead) {
+            temp -> next = prev;
+            prev = temp;
+            temp = ahead;
+            ahead = ahead -> next;
+        }
+        temp -> next = prev;
+        return temp;
     }
 };

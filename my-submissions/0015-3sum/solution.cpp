@@ -3,28 +3,25 @@ public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         sort(nums.begin(), nums.end());
         int n = nums.size();
-
-        if (nums[0] > 0 || nums[n-1] < 0) return {};
-        if (nums[0] == 0 && nums[n-1] == 0) return {{0,0,0}};
-
-        vector<vector<int>> ans;
-
-        for (int i = 0; i < n; ++i){
-            if (i == 0 || nums[i-1] != nums[i]){
-                int target = - nums[i];
-                int s = i+1, e = n-1;
-                while (s < e){
-                    int sum = nums[s] + nums[e];
-                    if (sum == target){
-                        ans.push_back({nums[i], nums[s++], nums[e--]});
-                        while (s < e && nums[s] == nums[s - 1]) s++;
-                        while (s < e && nums[e] == nums[e + 1]) e--;
+        vector<vector<int>> res;
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > 0) break;
+            if (i == 0 || nums[i] != nums[i-1]) {
+                int target = -nums[i];
+                int st = i + 1, ed = n - 1;
+                while (st < ed) {
+                    int sum = nums[st] + nums[ed];
+                    if (sum == target) {
+                        res.push_back({nums[i], nums[st], nums[ed]});
+                        st++, ed--;
+                        while (st < ed && nums[st] == nums[st-1]) st++;
+                        while (st < ed && nums[ed] == nums[ed+1]) ed--;
                     }
-                    else if (sum < target) s++;
-                    else e--;
+                    else if (sum < target) st++;
+                    else ed--;
                 }
             }
         }
-        return ans;
+        return res;
     }
 };

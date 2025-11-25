@@ -1,23 +1,23 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        sort(intervals.begin(), intervals.end(),
-        [](const vector<int>& a, const vector<int>& b) {
-            return a[0] < b[0];  // Sort by first element
-        });
+        vector<vector<int>> merged;
+        if (intervals.empty()) return merged;
 
-        vector<vector<int>> ans;
-        int startI = intervals[0][0], endI = intervals[0][1];
-        for (int i = 1; i < intervals.size(); ++i){
-            if (intervals[i][0] <= endI)
-               endI = max(endI, intervals[i][1]);
-            else {
-                ans.push_back({startI, endI});
-                startI = intervals[i][0];
-                endI = intervals[i][1];
+        sort(intervals.begin(), intervals.end());
+
+        merged.push_back(intervals[0]);
+
+        for (int i = 1; i < intervals.size(); ++i) {
+            auto &last = merged.back();
+            auto &curr = intervals[i];
+
+            if (curr[0] <= last[1]) { // overlaps
+                last[1] = max(last[1], curr[1]);
+            } else {
+                merged.push_back(curr);
             }
         }
-        ans.push_back({startI, endI});
-        return ans;
+        return merged;
     }
 };

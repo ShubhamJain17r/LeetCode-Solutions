@@ -1,21 +1,22 @@
 class Solution {
 public:
     int deleteAndEarn(vector<int>& nums) {
-        if (nums.size() == 1)
-            return nums[0];
-
         int maxVal = *max_element(nums.begin(), nums.end());
         vector<int> points(maxVal + 1, 0);
-        for (int val : nums) {
-            points[val]+= val;
-        }
-        int prev2 = 0;
-        int prev1 = points[1];
-        for (int i = 2; i<= maxVal; ++i) {
-            int curr = max(prev1, prev2 + points[i]);
+
+        for (int &x : nums)
+            points[x] += x;
+
+        // House Robber DP
+        int prev2 = 0, prev1 = points[0];
+        for (int i = 1; i <= maxVal; i++) {
+            int pick = points[i] + prev2;
+            int notPick = prev1;
+            int curr = max(pick, notPick);
             prev2 = prev1;
-            prev1 = curr; 
+            prev1 = curr;
         }
         return prev1;
     }
 };
+

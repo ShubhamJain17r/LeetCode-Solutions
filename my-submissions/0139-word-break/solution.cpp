@@ -6,18 +6,15 @@ public:
         int n = s.size();
         vector<bool> dp(n + 1, false);
 
-        dp[0] = true;  // empty string is always valid
+        dp[0] = true;
 
         for (int i = 1; i <= n; i++) {
             for (int j = 0; j < i; j++) {
-                // cout<<s.substr(j, i - j)<<endl;
                 if (dp[j] && dict.count(s.substr(j, i - j))) {
-                    // cout<<"----- -   "<<i<<endl;
                     dp[i] = true;
                     break;
                 }
             }
-            // cout<<"====="<<endl;
         }
 
         return dp[n];

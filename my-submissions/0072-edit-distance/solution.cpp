@@ -1,38 +1,37 @@
 class Solution {
 public:
-    int minDistance(string word1, string word2) {
-        int m = word1.size();
-        int n = word2.size();
-
-        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
-
-        // Base cases:
-        // dp[i][0] = i (delete all characters)
-        // dp[0][j] = j (insert all characters)
-        for (int i = 0; i <= m; ++i) dp[i][0] = i;
-        for (int j = 0; j <= n; ++j) dp[0][j] = j;
-
-        for (int i = 1; i <= m; ++i) {
-            for (int j = 1; j <= n; ++j) {
-                
-                if (word1[i-1] == word2[j-1]) {
-                    // Characters match → no change needed
-                    dp[i][j] = dp[i-1][j-1];
-                } else {
-                    // Characters don't match → choose min of:
-                    // 1. insert
-                    // 2. delete
-                    // 3. replace
-                    dp[i][j] = 1 + min({
-                        dp[i][j-1],     // insert
-                        dp[i-1][j],     // delete
-                        dp[i-1][j-1]    // replace
-                    });
+    int f(int i, int j, string s1, string s2) {
+        if (i < 0)
+            return j + 1;
+        if (j < 0)
+            return i + 1;
+        if (s1[i] == s2[j])
+            return f(i - 1, j - 1, s1, s2);
+        int insert = f(i-1, j, s1, s2);
+        int del = f(i, j - 1, s1, s2);
+        int replace = f(i - 1, j - 1, s1, s2);
+        return 1 + min(insert, min(del, replace));
+    }
+    int minDistance(string s1, string s2) {
+        int n = s1.length(), m = s2.length();
+        vector<int> prev(m + 1, 0), curr(m + 1, 0);
+        for (int j = 0; j <= m; ++j) {
+            prev[j] = j;
+        }
+        for (int i = 1; i <= n; ++i) {
+            curr[0] = i;
+            for (int j = 1; j <= m; ++j) {
+                if (s1[i - 1] == s2[j - 1])
+                    curr[j] = prev[j - 1];
+                else {
+                    int insert = prev[j];
+                    int del = curr[j - 1];
+                    int replace = prev[j - 1];
+                    curr[j] = 1 + min(insert, min(del, replace));
                 }
             }
+            prev = curr;
         }
-
-        return dp[m][n];
+        return prev[m];
     }
 };
-

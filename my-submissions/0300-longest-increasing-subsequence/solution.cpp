@@ -1,19 +1,15 @@
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
-        vector<int> lis;  // stores the smallest tail of all increasing subsequences of length i+1
-        
-        for (int x : nums) {
-            auto it = lower_bound(lis.begin(), lis.end(), x);
-            
-            if (it == lis.end()) {
-                lis.push_back(x);     // extend LIS
-            } else {
-                *it = x;              // replace to keep tails minimal
-            }
+        int n = nums.size();
+        vector<int> arr;
+        for (int& num : nums) {
+            int i = lower_bound(arr.begin(), arr.end(), num) - arr.begin();
+            if (i == arr.size())
+                arr.push_back(num);
+            else
+                arr[i] = num;
         }
-        
-        return lis.size();
+        return arr.size();
     }
 };
-

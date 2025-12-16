@@ -1,30 +1,31 @@
 class Solution {
-public:
-    bool dfs(vector<vector<int>>& graph, vector<bool>& visited, vector<bool>& inStack, int start) {
-        visited[start] = true;
-        inStack[start] = true;
-        for (int neighbour : graph[start]) {
-            if (!visited[neighbour] && dfs(graph, visited, inStack, neighbour))
-                return true;
-            if (inStack[neighbour]) 
+private:
+    bool dfs(int node, vector<vector<int>>& graph, vector<bool> &vis, vector<bool> &inStack, vector<int> &safe) {
+        vis[node] = inStack[node] = true;
+        for (int nei : graph[node]) {
+            if (!vis[nei]) {
+                if (dfs(nei, graph, vis, inStack, safe))
+                    return true;
+            }
+            else if (inStack[nei])
                 return true;
         }
-        inStack[start] = false;
+        inStack[node] = false;
+        safe.push_back(node);
         return false;
     }
+public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<bool> visited(n, false);
+        vector<bool> vis(n, false);
         vector<bool> inStack(n, false);
-        vector<int> ans;
+        vector<int> safe;
         for (int i = 0; i < n; ++i) {
-            if (!visited[i])
-                dfs(graph, visited, inStack, i);
+            if (!vis[i]) {
+                dfs(i, graph, vis, inStack, safe);
+            }
         }
-        for (int i = 0; i < n; ++i) {
-            if (!inStack[i])
-                ans.push_back(i);
-        }
-        return ans;
+        sort(safe.begin(), safe.end());
+        return safe;
     }
 };

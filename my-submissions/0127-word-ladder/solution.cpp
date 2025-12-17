@@ -1,37 +1,58 @@
 class Solution {
+private:
+    void makePatterns(unordered_map<string, vector<string>> &patterns, string word) {
+        for (int i = 0;i < word.length(); ++i) {
+            string temp = word.substr(0,i) + '*' + word.substr(i + 1);
+            patterns[temp].push_back(word);
+        }
+    }
 public:
     int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
-        unordered_set<string> dict(wordList.begin(), wordList.end());
-        if (dict.count(endWord) == 0) return 0;
-        int L = beginWord.length();
+        bool isEndWordPresent = false;
         unordered_map<string, vector<string>> patterns;
-        for (string w : dict) {
-            for (int i = 0; i < L; ++i) {
-                string pat = w.substr(0,i) + '*' + w.substr(i + 1);
-                patterns[pat].push_back(w);
-            }
+        unordered_set<string> dict(wordList.begin(), wordList.end());
+
+        makePatterns(patterns, beginWord);
+        for (string &word : wordList) {
+            if (word == endWord)
+                isEndWordPresent = true;
+            makePatterns(patterns, word);
         }
-        int steps = 1;
+
+        if (!isEndWordPresent) return 0;
+
+        dict.erase(beginWord);
+
+        // for (auto &p : patterns) {
+        //     cout<<p.first<<" : ";
+        //     for (auto &w : p.second)
+        //         cout<<w<<" ";
+        //     cout<<endl;
+        // }
+
         queue<string> q;
         q.push(beginWord);
-        unordered_set<string> visited;
-        visited.insert(beginWord);
+        int levels = 0;
         while (!q.empty()) {
             int sz = q.size();
-            while (sz--){
-                string curr = q.front(); q.pop();
-                if (curr == endWord) return steps;
-                for (int i = 0; i < L; ++i) {
-                    string pat = curr.substr(0, i) + '*' + curr.substr(i + 1);
-                    for (const string& nei : patterns[pat]) {
-                        if (!visited.count(nei)) {
-                            visited.insert(nei);
-                            q.push(nei);
+            levels++;
+            while (sz--) {
+                string word = q.front(); q.pop();
+                if (word == endWord)
+                    return levels;
+                for (int i = 0;i < word.length(); ++i) {
+                    string temp = word.substr(0,i) + '*' + word.substr(i + 1);
+                    if (patterns.count(temp)) {
+                        for (const string &w : patterns[temp]) {
+                            if (dict.count(w)) {
+                                dict.erase(w);
+                                q.push(w);
+                            }
                         }
+                        patterns.erase(temp);
                     }
                 }
             }
-            steps++;
         }
         return 0;
     }

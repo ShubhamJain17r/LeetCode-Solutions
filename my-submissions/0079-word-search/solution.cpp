@@ -1,40 +1,31 @@
 class Solution {
 public:
-    bool wordSearch(vector<vector<char>>& board, string word, int m, int n,int row, int col,int idx){
-        if (idx == word.length()){
+    bool dfs(vector<vector<char>>& board, string word, int idx, int i, int j) {
+        if (idx == word.length())
             return true;
-        }
-        char c = board[row][col];
-        board[row][col] = '#';
-        if (row + 1 < m && board[row + 1][col] == word[idx]){
-            if(wordSearch(board, word, m, n, row + 1, col, idx + 1)){
-                return true;
-            }
-        }
-        if (row - 1 >= 0 && board[row - 1][col] == word[idx]){
-            if(wordSearch(board, word, m, n, row - 1, col, idx + 1)){
-                return true;
-            }
-        }
-        if (col + 1 < n && board[row][col + 1] == word[idx]){
-            if(wordSearch(board, word, m, n, row, col + 1, idx + 1)){
-                return true;
-            }
-        }
-        if (col - 1 >= 0 && board[row][col - 1] == word[idx]){
-            if(wordSearch(board, word, m, n, row, col - 1, idx + 1)){
-                return true;
-            }
-        }
-        board[row][col] = c;
+            
+        if (i < 0 || j < 0 || i >= board.size() || j >= board[0].size() || board[i][j] != word[idx])
+            return false;
+        
+        char curr = board[i][j];
+        board[i][j] = '#';
+        if (dfs(board, word, idx + 1, i + 1, j)) return true;
+
+        if (dfs(board, word, idx + 1, i - 1, j)) return true;
+
+        if (dfs(board, word, idx + 1, i, j + 1)) return true;
+
+        if (dfs(board, word, idx + 1, i, j - 1)) return true;
+
+        board[i][j] = curr;
         return false;
     }
     bool exist(vector<vector<char>>& board, string word) {
-        int m = board.size(), n = board[0].size();
-        for (int i = 0; i < m; ++i){
-            for (int j = 0; j < n; ++j){
-                if (board[i][j] == word[0] && wordSearch(board, word, m, n, i, j, 1)){
-                    return true;
+        for (int i = 0; i < board.size(); i++) {
+            for (int j = 0; j < board[0].size(); j++) {
+                if (board[i][j] == word[0]) {
+                    if (dfs(board, word, 0, i, j))
+                        return true;
                 }
             }
         }

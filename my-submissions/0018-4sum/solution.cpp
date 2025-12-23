@@ -1,29 +1,36 @@
 class Solution {
 public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        sort(nums.begin(), nums.end());
+vector<vector<int>> fourSum(vector<int>& nums, int target) {
+    sort(nums.begin(), nums.end());
 
-        int n = nums.size();
-        vector<vector<int>> ans;
+    int n = nums.size();
+    vector<vector<int>> res;
+    for (int i = 0; i < n; ++i) {
+        if (i != 0 && nums[i] == nums[i - 1]) continue;
 
-        for (int i = 0; i < n - 2; ++i){
-            if (i != 0 && nums[i] == nums[i-1])continue;
-            for (int j = i+1; j < n-1; ++j){
-                if (j != i+1 && nums[j] == nums[j-1])continue;
-                long t = target - (long)(nums[i] + nums[j]);
-                int s = j+1, e = n - 1;
-                while (s < e){
-                    int sum = nums[s] + nums[e];
-                    if (sum < t) s++;
-                    else if (sum > t) e--;
-                    else{
-                        ans.push_back({nums[i], nums[j], nums[s++], nums[e--]});
-                        while (s < e && nums[s] == nums[s-1])s++;
-                        while (s < e && nums[e] == nums[e+1])e--;
-                    }
+        for (int j = i + 1; j < n; ++j) {
+            if (j != i + 1 && nums[j] == nums[j - 1]) continue;
+
+            int l = j + 1, r = n - 1;
+            while (l < r) {
+                long long sum = static_cast<long long>(nums[i] + nums[j]) + static_cast<long long>(nums[l] + nums[r]);
+                if (sum == target) {
+                    res.push_back({nums[i], nums[j], nums[l], nums[r]});
+                    l++, r--;
+                    while (l < r && nums[l] == nums[l - 1]) l++;
+                    while (l < r && nums[r] == nums[r + 1]) r--;
+                }
+                else if (sum < target) {
+                    l++;
+                    while (l < r && nums[l] == nums[l - 1]) l++;
+                }
+                else {
+                    r--;
+                    while (l < r && nums[r] == nums[r + 1]) r--;
                 }
             }
         }
-        return ans;
     }
+    return res;
+}
 };

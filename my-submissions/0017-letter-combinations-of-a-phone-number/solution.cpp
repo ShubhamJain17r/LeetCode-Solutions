@@ -1,35 +1,25 @@
 class Solution {
 public:
-    unordered_map<char, string> m = {
-        {'2', "abc"},
-        {'3', "def"},
-        {'4', "ghi"},
-        {'5', "jkl"},
-        {'6', "mno"},
-        {'7', "pqrs"},
-        {'8', "tuv"},
-        {'9', "wxyz"}
-    };
+    // mapping              0   1    2      3      4      5      6       7      8       9
+    vector<string> mapp = {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
 
-    void generateCombinations(string digits,string curr ,vector<string>& ans, int i){
-        if (i == digits.length()){
-            ans.push_back(curr);
+    void letterCombinationsHelper(string digits, int idx, string &temp, vector<string> &ans) {
+        if (idx == digits.length()) {
+            ans.push_back(temp);
             return;
         }
-        char digit = digits[i];
-        for (char c : m[digit]){
-            curr.push_back(c);
-            generateCombinations(digits, curr, ans, i+1);
-            curr.pop_back();
+
+        int digit = digits[idx] - '0';
+        for (const char &c : mapp[digit]) {
+            temp.push_back(c);
+            letterCombinationsHelper(digits, idx + 1, temp, ans);
+            temp.pop_back();
         }
     }
-
     vector<string> letterCombinations(string digits) {
         vector<string> ans;
-        if (digits.length() == 0) return ans;
-        string curr = "";
-        generateCombinations(digits, curr, ans, 0);
-
+        string temp;
+        letterCombinationsHelper(digits, 0, temp, ans);
         return ans;
     }
 };

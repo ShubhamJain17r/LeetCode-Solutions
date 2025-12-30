@@ -1,32 +1,32 @@
 class Solution {
 public:
-    bool isPalindrome(string str){
-        int s = 0, e = str.length() - 1;
-        while (s < e){
-            if (str[s++] != str[e--]) return false;
+    bool isPalindrome(string &s) {
+        int n = s.length();
+        int i = 0, j = n - 1;
+        while (i < j) {
+            if (s[i] != s[j]) return false;
+            i++, j--;
         }
         return true;
     }
-    void partition(string& s,vector<string>& subset, vector<vector<string>>& ans, int idx){
-        if (idx == s.length()){
-            ans.push_back(subset);
+    void partitionHelper(string &s, int idx, vector<string> &temp, vector<vector<string>> &ans) {
+        if (idx == s.length()) {
+            ans.push_back(temp);
             return;
         }
-        for (int i = idx; i < s.length(); ++i){
+        for (int i = idx; i < s.length(); ++i) {
             string curr = s.substr(idx, i - idx + 1);
-            if (!isPalindrome(curr)) continue;;
-            subset.push_back(curr);
-            partition(s, subset, ans, i + 1);
-            subset.pop_back();
+            if (!isPalindrome(curr)) continue;
+
+            temp.push_back(curr);
+            partitionHelper(s, i + 1, temp, ans);
+            temp.pop_back();
         }
     }
-
     vector<vector<string>> partition(string s) {
         vector<vector<string>> ans;
-        vector<string> subset;
-
-        partition(s, subset, ans, 0);
-
+        vector<string> temp;
+        partitionHelper(s, 0, temp, ans);
         return ans;
     }
 };

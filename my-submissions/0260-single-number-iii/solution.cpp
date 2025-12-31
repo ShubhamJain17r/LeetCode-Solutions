@@ -1,14 +1,21 @@
 class Solution {
 public:
     vector<int> singleNumber(vector<int>& nums) {
-        long XOR = 0;
-        for (int &x : nums) XOR ^= x;
-        long fcb = XOR ^ (XOR & (XOR - 1));
-        int b1 = 0, b2 = 0;
-        for (int &x : nums) {
-            if (x & fcb) b1 ^= x;
-            else         b2 ^= x;
+        int XOR = 0;
+        for (const int &val : nums)
+            XOR ^= val;
+
+        int bit = 1;
+        while ((bit & XOR) == 0)
+            bit <<= 1;
+            
+        int one = 0, two = 0;
+        for (const int &val : nums) {
+            if ((val & bit) == 0)
+                one ^= val;
+            else
+                two ^= val;
         }
-        return {b1, b2};
+        return {one, two};
     }
 };

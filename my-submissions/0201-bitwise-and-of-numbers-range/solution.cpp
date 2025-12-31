@@ -1,8 +1,9 @@
 class Solution {
 public:
-    int rangeBitwiseAnd(int m, int n) {
-        while(n>m)
-                n = n & n-1;
-        return n;
+    int rangeBitwiseAnd(int left, int right) {
+        while (right > left) {
+            right = right & (right - 1);
+        }
+        return right;
     }
 };

@@ -1,18 +1,16 @@
 class Solution {
 public:
-    int squareSumOfDigits(int n){
-        int ans = 0;
-        while (n > 0){
-            ans = ans + (n % 10)*(n % 10);
-            n = n / 10;
-        }
-        return ans;
-    }
     bool isHappy(int n) {
-        unordered_set<int> s;
-        while (n!=1 && s.find(n) == s.end()){
-            s.insert(n);
-            n = squareSumOfDigits(n);
+        unordered_set<long long> hash;
+        while (n != 1 && (hash.count(n) == 0)) {
+            int sumOfSquare = 0;
+            hash.insert(n);
+            while (n > 0) {
+                int rem = n % 10;
+                sumOfSquare += (rem * rem);
+                n /= 10;
+            }
+            n = sumOfSquare;
         }
         return n == 1;
     }

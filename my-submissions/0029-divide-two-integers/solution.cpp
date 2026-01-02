@@ -1,22 +1,28 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        if (dividend == divisor) return 1;
+        long long d = abs(1LL * dividend);
+        long long n = abs(1LL * divisor);
+
+        bool negative = false;
+        if (dividend < 0 && divisor > 0 || dividend > 0 && divisor < 0) negative = true;
+
         if (dividend == 0) return 0;
-        bool sign = true;
-        if (dividend < 0 && divisor > 0) sign = false;
-        if (dividend > 0 && divisor < 0) sign = false;
-        long long n = llabs(dividend), d = llabs(divisor);
-        unsigned long long ans = 0;
-        while (n >= d) {
-            long long cnt = 0;
-            while (n >= (d << (cnt + 1))) cnt++;
-            ans += 1 << cnt;
-            n = n - (d << cnt);
+        if (d == n) return negative ? -1 : 1;
+        if (n > d) return 0;
+
+        long long q = 0;
+        while (d >= n) {
+            int cnt = 1;
+            while ((n << cnt) < d) cnt++;
+            q += (1 << (cnt - 1));
+            d = d - (n << (cnt - 1));
         }
-        cout<<ans;
-        if(ans >= INT_MAX && sign) return INT_MAX;
-        if(ans > INT_MAX && !sign) return INT_MIN;
-        return sign ? ans : ~ans + 1;
+        if (negative) {
+            if (q > INT_MAX)
+                return INT_MIN;
+            return ~q + 1;
+        }
+        return q >= INT_MAX ? INT_MAX : q;
     }
 };

@@ -1,17 +1,17 @@
 class Solution {
 public:
     bool isAnagram(string s, string t) {
-        if (s.length() != t.length()) return false;
-        int freq[26] = {0};
-        for (char c : s){
-            freq[c - 'a']++;
+        int n = s.length(), m = t.length();
+        if (n != m) return false;
+
+        int hash[26] = {0};
+        for (int i = 0; i < n; ++i) {
+            hash[s[i] - 'a']++;
+            hash[t[i] - 'a']--;
         }
-        for (char c : t){
-            freq[c - 'a']--;
-        }
-        for (int i = 0; i<26; i++){
-            if (freq[i] != 0)return false;
-        }
+        for (int i = 0; i < 26; ++i)
+            if (hash[i] != 0) return false;
+        
         return true;
     }
 };

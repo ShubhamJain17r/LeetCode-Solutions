@@ -1,27 +1,25 @@
 class Solution {
 public:
-    bool isOpeningParenthesis(char c){
-        return c == '(' || c == '{' || c == '[';
-    }
-    bool isClosingParenthesis(char c){
-        return c == ')' || c == '}' || c == ']';
-    }
     bool isValid(string s) {
-        if (s.length() % 2) return false;
+        int n = s.length();
+        if (n & 1 == 1) return false;
+
         stack<char> st;
-        for (char c : s){
-            if (st.empty()){
-                if (isClosingParenthesis(c))
-                    return false;
-                else 
-                    st.push(c);
-            }
-            else if (isOpeningParenthesis(c))
+        for (const char &c : s) {
+            if (c == '(' || c == '{' || c == '[')
                 st.push(c);
-            else if (c == ')' && st.top() != '(' || c == '}' && st.top() != '{' || c == ']' && st.top() != '[') 
-                return false;
-            else 
+            else if (c == ')') {
+                if (st.empty() || st.top() != '(') return false;
                 st.pop();
+            }
+            else if (c == '}') {
+                if (st.empty() || st.top() != '{') return false;
+                st.pop();
+            }
+            else {
+                if (st.empty() || st.top() != '[') return false;
+                st.pop();
+            }
         }
         return st.empty();
     }

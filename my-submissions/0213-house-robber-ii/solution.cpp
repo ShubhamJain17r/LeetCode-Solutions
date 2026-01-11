@@ -1,27 +1,23 @@
 class Solution {
 public:
-    int hr_space_optimized(vector<int>& input, int n) {
-        if (n == 1)
-            return input[0];
-        int prev2 = input[0], prev = max(input[0], input[1]);
-        for (int i = 2; i < n; ++i) {
-            int curr = max(prev2 + input[i], prev);
-            prev2 = prev;
-            prev = curr;
+    int houseRobber(vector<int>& nums, int s, int e) {
+        if (s == e) return nums[s];
+        int prev2 = nums[s];
+        int prev1 = max(nums[s], nums[s + 1]);
+
+        for (int i = s + 2; i <= e; ++i) {
+            int rob = nums[i] + prev2;
+            int leave = prev1;
+
+            prev2 = prev1;
+            prev1 = max(rob, leave);
         }
-        return prev;
+        return prev1;
     }
     int rob(vector<int>& nums) {
         int n = nums.size();
-        if (n == 1)
-            return nums[0];
-        vector<int> temp1, temp2;
-        for (int i = 0; i < n; ++i) {
-            if (i != 0)
-                temp1.push_back(nums[i]);
-            if (i != n - 1)
-                temp2.push_back(nums[i]);
-        }
-        return max(hr_space_optimized(temp1, temp1.size()), hr_space_optimized(temp2, temp2.size()));
+        if (n == 1) return nums[0];
+
+        return max(houseRobber(nums, 0, n - 2), houseRobber(nums, 1, n - 1));
     }
 };

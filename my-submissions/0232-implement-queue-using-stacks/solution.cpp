@@ -1,8 +1,30 @@
 class MyQueue {
-    stack<int> s1;
-    stack<int> s2;
-    int pop_peekHelper(stack<int>& s1, stack<int>& s2) {
-        if (!s1.empty()) {
+private:
+    stack<int> s1;      // stack
+    stack<int> s2;      // pseudo queue
+public:
+    MyQueue() {
+        
+    }
+    
+    void push(int x) {
+        s1.push(x);
+    }
+    
+    int pop() {
+        if (s2.empty()) {
+            while (!s1.empty()) {
+                s2.push(s1.top());
+                s1.pop();
+            }
+        }
+        int first = s2.top();
+        s2.pop();
+        return first;
+    }
+    
+    int peek() {
+        if (s2.empty()) {
             while (!s1.empty()) {
                 s2.push(s1.top());
                 s1.pop();
@@ -10,33 +32,9 @@ class MyQueue {
         }
         return s2.top();
     }
-public:
-    MyQueue() {
-
-    }
-    
-    void push(int x) {
-        if (s1.empty()) {
-            while (!s2.empty()) {
-                s1.push(s2.top());
-                s2.pop();
-            }
-        }
-        s1.push(x);
-    }
-    
-    int pop() {
-        int x = pop_peekHelper(s1, s2);
-        s2.pop();
-        return x;
-    }
-    
-    int peek() {
-        return pop_peekHelper(s1, s2);
-    }
     
     bool empty() {
-        return (s1.empty() && s2.empty());
+        return s1.empty() && s2.empty();
     }
 };
 

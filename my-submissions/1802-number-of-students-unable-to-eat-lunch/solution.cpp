@@ -2,26 +2,26 @@ class Solution {
 public:
     int countStudents(vector<int>& students, vector<int>& sandwiches) {
         int n = students.size();
-        queue<int> q;
-        for (int i = 0; i < n; ++i) 
-            q.push(i);
-        int idx = 0;
-        int lastMismatch = -1;
-        while (idx < n) {
-            int s = q.front();
-            if (students[s] == sandwiches[idx]) {
+        
+        int idx = 0;            // curr sandwich
+        queue<int> q(students.begin(), students.end());
+
+        while (idx != n) {
+            if (sandwiches[idx] == q.front()) {
+                q.pop();
                 idx++;
-                lastMismatch = -1;
+                continue;
             }
-            else {
-                if (lastMismatch == -1) 
-                    lastMismatch = s;
-                else if (lastMismatch == s)
-                    break;
-                q.push(s);
+            int cnt = 0;
+            while (cnt <= q.size() && q.front() != sandwiches[idx]) {
+                int x = q.front();
+                q.pop();
+                q.push(x);
+                cnt++;
             }
-            q.pop();
+            if (cnt > q.size()) return q.size();
         }
-        return q.size();
+
+        return 0;
     }
 };

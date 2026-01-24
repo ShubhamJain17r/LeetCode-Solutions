@@ -7,20 +7,22 @@ public:
         {'L', 50},
         {'C', 100},
         {'D', 500},
-        {'M', 1000},
+        {'M', 1000}
     };
     int romanToInt(string s) {
         int res = 0;
-        char last = '\0';
-        for (char c : s) {
-            if (last != '\0' && map[last] < map[c]) {
-                res -= map[last];
-                res += (map[c] - map[last]);
-            }
+        int prev = 0;
+
+        for (int i = s.size() - 1; i >= 0; --i) {
+            int curr = map[s[i]];
+
+            if (curr < prev) {
+                res -= curr;
+            } 
             else {
-                res += map[c];
+                res += curr;
             }
-            last = c;
+            prev = curr;
         }
         return res;
     }

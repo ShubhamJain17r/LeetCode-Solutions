@@ -1,15 +1,19 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        vector<int> seen(256, -1);
-        int maxLen = 0, l = 0;
+        vector<int> last(256, -1);
+        int left = 0, ans = 0;
 
-        for (int r = 0; r < s.length(); ++r) {
-            if (seen[s[r]] != -1 && seen[s[r]] >= l)
-                l = seen[s[r]] + 1;
-            maxLen = max(maxLen, r - l + 1);
-            seen[s[r]] = r;
+        for (int right = 0; right < s.size(); right++) {
+            char c = s[right];
+
+            if (last[c] >= left) {
+                left = last[c] + 1;
+            }
+
+            last[c] = right;
+            ans = max(ans, right - left + 1);
         }
-        return maxLen;
+        return ans;
     }
 };

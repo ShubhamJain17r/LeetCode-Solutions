@@ -1,33 +1,41 @@
 class Solution {
 public:
-// int getMaxValue(const vector<int>& piles) {
-//     int maxValue = INT_MIN;
-//     for (int pileSize : piles)
-//         maxValue = max(maxValue, pileSize);
-//     return maxValue;
-// }
-
-bool canFinishWithinHours(const vector<int>& piles, int bananasPerHour, int totalHours) {
-    for (int pileSize : piles) {
-        totalHours -= static_cast<int>(ceil(pileSize / static_cast<double>(bananasPerHour)));
-        if (totalHours < 0)
-            return false;
+    inline int ceil(int a, int b) {
+        if (a % b == 0) {
+            return a / b;
+        }
+        return (a / b) + 1;
     }
-    return true;
-}
-
-int minEatingSpeed(vector<int>& piles, int hoursAvailable) {
-    int left = 1;
-    int right = *max_element(piles.begin(), piles.end());
-
-    while (left <= right) {
-        int midSpeed = left + ((right - left) >> 1);
-
-        if (canFinishWithinHours(piles, midSpeed, hoursAvailable))
-            right = midSpeed - 1;
-        else
-            left = midSpeed + 1;
+    int func(vector<int>& piles, int k) {
+        int time = 0;
+        for (int pile : piles) {
+            int t = ceil(pile, k);
+            time += t;
+        }
+        return time;
     }
-    return left;
-}
+    int minEatingSpeed(vector<int>& piles, int h) {
+        int n = piles.size();
+        int start = 0, end = 0, ans;
+        long long sum = 0;
+        for (int pile : piles) {
+            sum += pile;
+            end = max(end, pile);
+        }
+        start = sum / h;
+        start = max(start, 1);
+
+        while (start <= end) {
+            int m = start + ((end - start) >> 1);
+            int time = func(piles, m) ;
+            if (time <= h) {
+                end = m - 1;
+                ans = m;
+            }
+            else {
+                start = m + 1;
+            }
+        }
+        return ans;
+    }
 };

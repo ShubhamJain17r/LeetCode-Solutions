@@ -1,19 +1,21 @@
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {
-        vector<int> last(256, -1);
-        int left = 0, ans = 0;
+        vector<int> arr(256, -1);
+        int maxLen = 0;
+        int left = 0;
 
-        for (int right = 0; right < s.size(); right++) {
-            char c = s[right];
-
-            if (last[c] >= left) {
-                left = last[c] + 1;
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s[i];
+            // std::cout<<arr[c]<<' ';
+            if (arr[c] == -1 || arr[c] < left) {
+                maxLen = max(maxLen, i - left + 1);
             }
-
-            last[c] = right;
-            ans = max(ans, right - left + 1);
+            else {
+                left = arr[c] + 1; 
+            }
+            arr[c] = i;
         }
-        return ans;
+        return maxLen;
     }
 };

@@ -1,20 +1,31 @@
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
-        int n = intervals.size();
-        int i = 0;
 
-        vector<vector<int>> res;
-        while (i < n && intervals[i][1] < newInterval[0])  // left of overlapping interval
-            res.push_back(intervals[i++]);
+        vector<vector<int>> ans;
+        int i = 0, n = intervals.size();
+
+        // 1. Add intervals before newInterval
+        while (i < n && intervals[i][1] < newInterval[0]) {
+            ans.push_back(intervals[i]);
+            i++;
+        }
+
+        // 2. Merge overlapping intervals
         while (i < n && intervals[i][0] <= newInterval[1]) {
             newInterval[0] = min(newInterval[0], intervals[i][0]);
             newInterval[1] = max(newInterval[1], intervals[i][1]);
             i++;
         }
-        res.push_back(newInterval);
-        while (i < n)  // right of overlapping interval
-            res.push_back(intervals[i++]);
-        return res;
+
+        ans.push_back(newInterval);
+
+        // 3. Add remaining intervals
+        while (i < n) {
+            ans.push_back(intervals[i]);
+            i++;
+        }
+
+        return ans;
     }
 };

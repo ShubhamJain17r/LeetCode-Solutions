@@ -1,51 +1,29 @@
 class Solution {
+private:
+    int count = 0;
 public:
-void permuteUniqueHelper(vector<int> nums, int start, vector<vector<int>>& ans){
-    if (start == nums.size()){
-        ans.push_back(nums);
-        return;
+    void permutations(vector<int> nums, int idx, vector<vector<int>>&res) {
+        if (idx == nums.size()) {
+            count++;
+            res.push_back(nums);
+            return;
+        }
+
+        for (int i = idx; i < nums.size(); ++i) {
+            if (i != idx && nums[i] == nums[idx]) continue;
+            swap(nums[i], nums[idx]);
+            permutations(nums, idx + 1, res);
+            // swap(nums[i], nums[idx]);
+        }
     }
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
 
-    for (int i = start; i<nums.size(); ++i){
-        if (i > start && nums[i] == nums[start])continue;
+        vector<vector<int>> res;
 
-        swap(nums[i], nums[start]);
-        permuteUniqueHelper(nums, start + 1, ans);
-        // swap(nums[i], nums[start]);
+        permutations(nums, 0, res);
+        cout << count;
+        return res;
     }
-}
-
-vector<vector<int>> permuteUnique(vector<int>& nums) {
-    sort(nums.begin(), nums.end());
-    vector<vector<int>> ans;
-    permuteUniqueHelper(nums, 0, ans);
-    return ans;
-}
 };
 
-// class Solution {
-// public:
-//     void helper(vector<int> nums, int start, vector<vector<int>>& ans){
-//         if (start == nums.size()){
-//             ans.push_back(nums);
-//             return;
-//         }
-
-//         for (int i = start; i<nums.size(); ++i){
-//             if (i > start && nums[i] == nums[start])continue;
-
-//             swap(nums[i], nums[start]);
-//             helper(nums, start + 1, ans);
-//             // swap(nums[i], nums[start]);
-//         }
-//     }
-//     vector<vector<int>> permuteUnique(vector<int>& nums) {
-//         sort(nums.begin(), nums.end());
-
-//         vector<vector<int>> ans;
-
-//         helper(nums, 0, ans);
-
-//         return ans;
-//     }
-// };

@@ -12,28 +12,43 @@
 class Solution {
 public:
     int minDepth(TreeNode* root) {
-        if (!root) return 0;
+        if (!root)
+            return 0;
 
-        queue<TreeNode*> q;
-        q.push(root);
-
-        int depth = 0;
-        bool found = false;
-
-        while (!found && !q.empty()) {
-            int sz = q.size();
-            while (sz--) {
-                TreeNode* node = q.front(); q.pop();
-
-                if (!node->left && !node->right) {
-                    found = true;
-                    break;
-                }
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
-            }
-            depth++;
+        if (!root -> left) {
+            return 1 + minDepth(root -> right);
         }
-        return depth;
+        if (!root -> right) {
+            return 1 + minDepth(root -> left);
+        }
+
+        return 1 + min(minDepth(root -> left), minDepth(root -> right));
+
+
+        // queue<TreeNode*> q;
+        // q.push(root);
+
+        // int depth = 0;
+
+        // while (!q.empty()) {
+        //     int sz = q.size();
+
+        //     while (sz--) {
+        //         TreeNode* node = q.front(); q.pop();
+
+        //         if (!node -> left && !node -> right) {
+        //             return depth + 1;
+        //         }
+
+        //         if (node -> left) {
+        //             q.push(node -> left);
+        //         }
+        //         if (node -> right) {
+        //             q.push(node -> right);
+        //         }
+        //     }
+        //     depth++;
+        // }
+        // return depth;
     }
 };

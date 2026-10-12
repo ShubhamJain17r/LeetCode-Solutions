@@ -1,14 +1,22 @@
 class Solution {
 public:
     char findTheDifference(string s, string t) {
-        int freq[26] = {0};
-        for (char c : s){
-            freq[c - 'a']++;
+        int ans = 0;
+        int len = s.size();
+        // for (char c : s) {
+        //     ans ^= c;
+        // }
+
+        // for (char c : t) {
+        //     ans ^= c;
+        // }
+
+        for (size_t i = 0; i < s.size(); ++i) {
+            ans ^= (s[i] ^ t[i]);
         }
-        for (char c : t){
-            if (freq[c - 'a'] == 0) return c;
-            freq[c - 'a']--;
-        }
-        return '\0';
+
+        return ans ^ t[len];
+
+        // return ans;
     }
 };

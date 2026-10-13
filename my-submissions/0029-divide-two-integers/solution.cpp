@@ -1,28 +1,42 @@
 class Solution {
 public:
     int divide(int dividend, int divisor) {
-        long long d = abs(1LL * dividend);
-        long long n = abs(1LL * divisor);
-
-        bool negative = false;
-        if (dividend < 0 && divisor > 0 || dividend > 0 && divisor < 0) negative = true;
-
         if (dividend == 0) return 0;
-        if (d == n) return negative ? -1 : 1;
-        if (n > d) return 0;
 
-        long long q = 0;
-        while (d >= n) {
-            int cnt = 1;
-            while ((n << cnt) < d) cnt++;
-            q += (1 << (cnt - 1));
-            d = d - (n << (cnt - 1));
+        long long Numerator = dividend;
+        long long Denomenator = divisor;
+
+        bool isDividendNeg = false;
+        bool isDivisorNeg = false;
+
+        if (dividend < 0) {
+            Numerator = -Numerator;
+            isDividendNeg = true;
         }
-        if (negative) {
-            if (q > INT_MAX)
-                return INT_MIN;
-            return ~q + 1;
+        if (divisor < 0) {
+            Denomenator = -Denomenator;
+            isDivisorNeg = true;
         }
-        return q >= INT_MAX ? INT_MAX : q;
+
+        long long quot = 0;
+
+        if (Denomenator == 1) {
+            quot = Numerator;
+            if (quot > INT_MAX && !(isDividendNeg ^ isDivisorNeg)) return INT_MAX;
+
+            goto exit;
+        }
+
+        while (Numerator >= Denomenator) {
+            int pow = 0;
+            while ((Denomenator << pow) <= Numerator) {cout << pow << endl; pow++;}
+
+            quot += (1 << (pow - 1));
+            Numerator -= (Denomenator << (pow - 1));
+        }
+
+        exit : return ((isDividendNeg ^ isDivisorNeg)  ?
+                    -quot                       : 
+                    quot);
     }
 };

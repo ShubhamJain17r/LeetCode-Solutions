@@ -1,69 +1,100 @@
+
 class Solution {
 private:
-    struct TrieNode {
-        TrieNode* children[26];
-        bool isEnd;
+    struct Trie {
+        Trie* children[26];
+        bool EOW;
 
-        TrieNode() {
-            isEnd = false;
-            for (int i = 0; i < 26; i++)
+        Trie() : EOW(false) {
+            for (int i = 0; i < 26; ++i)
                 children[i] = nullptr;
         }
     };
 
-    void makeTrie(TrieNode* root, vector<string>& words) {
-        for (const string &str : words) {
-            TrieNode* temp = root;
-            for (const char &c : str) {
+    void createTrie(Trie* root, const vector<string>& words) {
+        for (const string& word : words) {
+            Trie* temp = root;
+
+            for (char c : word) {
                 int idx = c - 'a';
-                if (!temp -> children[idx])
-                    temp -> children[idx] = new TrieNode();
-                temp = temp -> children[idx];
+
+                if (!temp->children[idx])
+                    temp->children[idx] = new Trie();
+
+                temp = temp->children[idx];
             }
-            temp -> isEnd = true;
+
+            temp->EOW = true;
         }
     }
 
-    void search(vector<vector<char>>& board, TrieNode* node, int i, int j, vector<string>& found, string& word) {
-        if (i < 0 || j < 0 || i >= board.size() || j >= board[0].size())
+    void dfs(vector<vector<char>>& board, Trie* node,
+             int i, int j, vector<string>& ans, string& word) {
+
+        // 1. Validate coordinates before accessing the board.
+        if (i < 0 || j < 0 ||
+            i >= (int)board.size() ||
+            j >= (int)board[0].size())
             return;
 
-        char curr = board[i][j];
-        if (curr == '#' || !node->children[curr - 'a'])
+        if (board[i][j] == '.')
             return;
 
-        node = node->children[curr - 'a'];
-        word.push_back(curr);
+        char c = board[i][j];
+        int idx = c - 'a';
 
-        if (node->isEnd) {
-            found.push_back(word);
-            node->isEnd = false;   // avoid duplicates
+        // 2. Follow the Trie edge matching the current character.
+        if (!node->children[idx])
+            return;
+
+        Trie* next = node->children[idx];
+
+        word.push_back(c);
+
+        // 3. Record the word only after consuming the current character.
+        if (next->EOW) {
+            ans.push_back(word);
+            next->EOW = false;  // Prevent duplicate results.
         }
 
-        board[i][j] = '#';
+        // 4. Mark the current cell as visited.
+        board[i][j] = '.';
 
-        search(board, node, i + 1, j, found, word);
-        search(board, node, i - 1, j, found, word);
-        search(board, node, i, j + 1, found, word);
-        search(board, node, i, j - 1, found, word);
+        // 5. Explore four adjacent cells.
+        dfs(board, next, i + 1, j, ans, word);
+        dfs(board, next, i - 1, j, ans, word);
+        dfs(board, next, i, j + 1, ans, word);
+        dfs(board, next, i, j - 1, ans, word);
 
-        board[i][j] = curr;
+        // 6. Backtrack.
+        board[i][j] = c;
         word.pop_back();
     }
 
-public:
-    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-        TrieNode* root = new TrieNode();
-        makeTrie(root, words);
+    void exist(vector<vector<char>>& board, Trie* root,
+               vector<string>& ans, string& word) {
+        if (board.empty() || board[0].empty())
+            return;
 
-        vector<string> found;
-        string word;
-
-        for (int i = 0; i < board.size(); i++) {
-            for (int j = 0; j < board[0].size(); j++) {
-                search(board, root, i, j, found, word);
+        for (int i = 0; i < (int)board.size(); ++i) {
+            for (int j = 0; j < (int)board[0].size(); ++j) {
+                dfs(board, root, i, j, ans, word);
             }
         }
-        return found;
+    }
+
+public:
+    vector<string> findWords(vector<vector<char>>& board,
+                             vector<string>& words) {
+        Trie* root = new Trie();
+        createTrie(root, words);
+
+        vector<string> ans;
+        string word;
+
+        exist(board, root, ans, word);
+
+        return ans;
     }
 };
+

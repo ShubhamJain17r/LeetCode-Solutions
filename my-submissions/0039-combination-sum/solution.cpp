@@ -1,26 +1,30 @@
 class Solution {
 public:
-    void combinationSumHelper(vector<int> &candidates, int target, int idx, vector<int> &temp, vector<vector<int>> &ans) {
+    void f(vector<int>& candidates, int target, vector<int>& vec, vector<vector<int>>& ans, int idx) {
         if (target == 0) {
-            ans.push_back(temp);
+            ans.push_back(vec);
+
             return;
         }
         if (idx == candidates.size()) return;
 
-        for (int i = idx; i < candidates.size(); i++) {
-            int val = candidates[i];
-            if (val > target) return;
-            temp.push_back(val);
-            combinationSumHelper(candidates, target - val, i, temp, ans);
-            temp.pop_back();
-        }
+        if (candidates[idx] <= target)
+        {
+            vec.push_back(candidates[idx]);
+            f(candidates, target - candidates[idx], vec, ans, idx);
+            vec.pop_back();
 
+            f(candidates, target, vec, ans, idx + 1);   
+        }
     }
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        sort(candidates.begin(), candidates.end());
         vector<vector<int>> ans;
-        vector<int> temp;
-        combinationSumHelper(candidates, target, 0, temp, ans);
+        vector<int> vec;
+
+        sort(candidates.begin(), candidates.end());
+
+        f(candidates, target, vec, ans, 0);
+
         return ans;
     }
 };

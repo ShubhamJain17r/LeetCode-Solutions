@@ -1,6 +1,6 @@
 # LeetCode Solutions & Algorithmic Practice 🚀
 
-[![LeetCode Stats](https://leetcard.jacoblin.cool/ShubhamJain17r?theme=dark&font=JetBrains%20Mono&ext=activity)](https://leetcode.com/ShubhamJain17r)
+[![LeetCode Stats](https://leetcard.jacoblin.cool/Shubham_jain_017x?theme=dark&font=JetBrains%20Mono&ext=activity)](https://leetcode.com/u/Shubham_jain_017x/)
 
 A repository tracking and synchronizing all my algorithmic problem-solving on **LeetCode (350+ problems solved)**.
 
